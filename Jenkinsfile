@@ -1,88 +1,66 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'Node22' // Configurado en Jenkins → Global Tool Configuration
-        jdk 'Java17'
-    }
-
     environment {
-        PROJECT_DIR = "WDIO_Example"
-        ALLURE_RESULTS = "allure-results"
-        ALLURE_REPORT  = "allure-report"
+        // Carpeta absoluta para resultados y reportes
+        ALLURE_RESULTS = "${env.WORKSPACE}/allure-results"
+        ALLURE_REPORT  = "${env.WORKSPACE}/allure-report"
     }
 
     stages {
-
-        stage('Initialize Workspace') {
+        stage('Preparar Workspace') {
             steps {
-                echo '🧹 Limpiando workspace antes de clonar...'
-                cleanWs() // Limpia antes de clonar, no al final
+                echo "Limpiando workspace..."
+                deleteDir()
             }
         }
 
         stage('Checkout') {
             steps {
-                echo '🔹 Clonando repositorio...'
-                dir("${PROJECT_DIR}") {
-                    git branch: 'main',
-                        url: 'https://github.com/RoyGuido/WDIO_Example.git'
-                }
+                git branch: 'main', url: 'https://github.com/RoyGuido/WDIO_Example.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Instalar dependencias') {
             steps {
-                echo '📦 Instalando dependencias...'
-                dir("${PROJECT_DIR}") {
-                    bat 'npm ci'
-                }
+                bat 'npm install'
             }
         }
 
-        stage('Run WDIO Tests') {
+        stage('Ejecutar WDIO') {
             steps {
-                echo '🚀 Ejecutando pruebas WDIO...'
-                dir("${PROJECT_DIR}") {
-                    bat 'npx wdio run wdio.conf.js --headless'
-                }
+                echo "Ejecutando pruebas WDIO..."
+                bat "npx wdio run wdio.conf.js"
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Generar reporte Allure') {
             steps {
-                echo '📊 Generando reporte Allure...'
-                dir("${PROJECT_DIR}") {
-                    bat "npx allure generate ${ALLURE_RESULTS} --clean -o ${ALLURE_REPORT}"
-                }
+                echo "Generando reporte Allure..."
+                bat """
+                npx allure generate %ALLURE_RESULTS% --clean -o %ALLURE_REPORT%
+                """
             }
         }
 
-        stage('Publish HTML Report') {
+        stage('Publicar reporte HTML') {
             steps {
-                echo '📖 Publicando reporte HTML en Jenkins...'
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: "${PROJECT_DIR}/${ALLURE_REPORT}",
+                echo "Abriendo reporte Allure en Jenkins..."
+                // Para visualizar el HTML, puedes usar el plugin "HTML Publisher"
+                publishHTML(target: [
+                    reportDir: 'allure-report',
                     reportFiles: 'index.html',
-                    reportName: 'Allure Report'
+                    reportName: 'Allure Report',
+                    keepAll: true,
+                    allowMissing: false
                 ])
             }
         }
-
     }
 
     post {
-        success {
-            echo '✅ Build finalizado con éxito.'
+        always {
+            echo 'Pipeline finalizada'
         }
-
-        failure {
-            echo '❌ Build fallido. Revisa los logs y reportes.'
-        }
-
-        // No limpiamos el workspace al final, para conservar los resultados
     }
 }

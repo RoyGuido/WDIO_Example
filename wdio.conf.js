@@ -138,14 +138,9 @@ exports.config = {
     reporters: [
     ['allure', {
         outputDir: path.join(__dirname, 'allure-results'),
-        disableWebdriverStepsReporting: true,
+        disableWebdriverStepsReporting: false,
         disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true
-    }],
-      ['html-nice', {
-        outputDir: 'html-report', // carpeta persistente dentro del proyecto
-        filename: 'report.html',
-        reportTitle: 'WDIO Test Report',
     }]
     ],
 
