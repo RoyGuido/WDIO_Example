@@ -58,13 +58,10 @@ exports.config = {
          browserName: 'chrome',
         'goog:chromeOptions': {
             args: [
-                '--disable-infobars',   // Quitar "Chrome está siendo controlado..."
-                '--disable-extensions', // Deshabilitar extensiones
-                '--start-maximized'     // Maximizar ventana
+                '--headless', '--no-sandbox', '--disable-dev-shm-usage'
                 ]
             },
-        },
-        { browserName: 'edge' }
+        }
     ],
 
     //
