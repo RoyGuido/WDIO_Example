@@ -15,7 +15,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '🔹 Clonando repositorio...'
-                git 'https://github.com/RoyGuido/WDIO_Example.git'
+                git branch: 'main', url: 'https://github.com/RoyGuido/WDIO_Example.git'
             }
         }
 
