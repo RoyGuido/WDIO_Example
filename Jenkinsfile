@@ -38,7 +38,8 @@ pipeline {
             steps {
                 echo "Generando reporte Allure..."
                 bat """
-                npx allure generate %ALLURE_RESULTS% --clean -o %ALLURE_REPORT%
+                npx allure generate allure-results --clean -o allure-report
+                npx allure open allure-report
                 """
             }
         }
