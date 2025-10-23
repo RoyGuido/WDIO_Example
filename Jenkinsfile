@@ -6,7 +6,7 @@ pipeline {
         jdk 'Java17'
     }
     environment {
-        ALLURE_RESULTS = "allure-report"
+        ALLURE_RESULTS = "allure-results"
         HTML_REPORT = "html-report"
     }
     stages {
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 echo '📊 Generando y publicando reporte de Allure...'
                 // Generar reporte HTML
-                bat 'npx allure generate allure-report --clean'
+                bat 'npx allure generate allure-results --clean -o allure-report'
                 publishHTML([
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,

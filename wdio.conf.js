@@ -136,7 +136,7 @@ exports.config = {
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: [
     ['allure', {
-        outputDir: 'allure-report',
+        outputDir: path.join(__dirname, 'allure-results'),
         disableWebdriverStepsReporting: true,
         disableWebdriverScreenshotsReporting: false,
         useCucumberStepReporter: true
