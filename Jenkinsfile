@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         nodejs 'Node22'    // Debe estar configurado en Jenkins → Global Tool Configuration
-        java 'Java17'
+        jdk 'Java17'
     }
 
     environment {
