@@ -54,12 +54,17 @@ pipeline {
 
     post {
         success {
-            echo 'Build finalizado con éxito.'
-            allure([
-                includeProperties: false,
-                jdk: '',
-                results: [[path: "${ALLURE_RESULTS}"]]
-            ])
+                echo '✅ Build finalizado con éxito.'
+                script {
+                    try {
+                        allure([
+                            includeProperties: false,
+                            jdk: '',
+                            results: [[path: "${ALLURE_RESULTS}"]]
+                        ])
+                    } catch (err) {
+                        echo "No se pudo ejecutar el paso Allure. Verifica si el plugin está instalado correctamente."
+        }
         }
 
         failure {
