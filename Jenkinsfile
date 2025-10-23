@@ -50,8 +50,7 @@ pipeline {
                     includeProperties: false,
                     jdk: '',
                     results: [[path: '**/allure-results/*.json']], // <-- patrón agregado
-                    reportBuildPolicy: 'ALWAYS',
-                    discardOldReports: true
+                    reportBuildPolicy: 'ALWAYS'
                 ])
             }
         }
