@@ -38,22 +38,20 @@ pipeline {
             steps {
                 echo "Generando reporte Allure..."
                 bat """
-                npx allure generate allure-results --clean -o allure-report
-                npx allure open allure-report
+                npx allure generate %ALLURE_RESULTS% --clean -o %ALLURE_REPORT%
                 """
             }
         }
 
-        stage('Publicar reporte HTML') {
+        stage('Publicar reporte Allure en Jenkins') {
             steps {
-                echo "Abriendo reporte Allure en Jenkins..."
-                // Para visualizar el HTML, puedes usar el plugin "HTML Publisher"
-                publishHTML(target: [
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Report',
-                    keepAll: true,
-                    allowMissing: false
+                echo "Publicando reporte Allure usando el plugin..."
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: '**/allure-results/*.json']], // <-- patrón agregado
+                    reportBuildPolicy: 'ALWAYS',
+                    discardOldReports: true
                 ])
             }
         }
