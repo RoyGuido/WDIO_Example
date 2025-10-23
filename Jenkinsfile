@@ -72,9 +72,6 @@ pipeline {
             echo 'Build fallido. Revisa los logs y reportes.'
         }
 
-        always {
-            echo '🧹 Limpiando workspace...'
-            cleanWs()
-        }
+        
     }
 }
