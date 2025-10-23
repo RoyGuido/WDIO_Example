@@ -3,8 +3,12 @@ pipeline {
 
     tools {
         nodejs 'Node22'  // nombre configurado en Jenkins
+        jdk 'Java17'
     }
-
+    environment {
+        ALLURE_RESULTS = "allure-results"
+        HTML_REPORT = "html-report"
+    }
     stages {
 
         stage('Checkout') {
@@ -37,24 +41,34 @@ pipeline {
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Reporte WDIO Allure'
+                    reportDir: "${HTML_REPORT}",
+                    reportFiles: 'report.html',
+                    reportName: 'WDIO HTML Report'
                 ])
+
+                // Archivar resultados Allure para mantenerlos disponibles
+                archiveArtifacts artifacts: "${ALLURE_RESULTS}/**", fingerprint: true
             }
         }
     }
 
     post {
-        always {
-            echo 'Limpiando workspace...'
-            cleanWs()
-        }
         success {
-            echo 'Pruebas WDIO ejecutadas correctamente.'
+            echo 'Build finalizado con éxito.'
+            allure([
+                includeProperties: false,
+                jdk: '',
+                results: [[path: "${ALLURE_RESULTS}"]]
+            ])
         }
+
         failure {
-            echo 'Error en alguna etapa del pipeline.'
+            echo 'Build fallido. Revisa los logs y reportes.'
+        }
+
+        always {
+            echo '🧹 Limpiando workspace...'
+            cleanWs()
         }
     }
 }
