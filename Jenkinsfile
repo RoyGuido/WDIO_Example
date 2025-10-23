@@ -36,7 +36,7 @@ pipeline {
             steps {
                 echo '📊 Generando y publicando reporte de Allure...'
                 // Generar reporte HTML
-                bat 'npx allure generate allure-results --clean -o allure-report'
+                bat 'npx allure generate allure-results --clean'
                 publishHTML([
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,

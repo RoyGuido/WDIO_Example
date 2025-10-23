@@ -142,9 +142,9 @@ exports.config = {
         useCucumberStepReporter: true
     }],
       ['html-nice', {
-      outputDir: 'html-report', // carpeta persistente dentro del proyecto
-      filename: 'report.html',
-      reportTitle: 'WDIO Test Report',
+        outputDir: 'html-report', // carpeta persistente dentro del proyecto
+        filename: 'report.html',
+        reportTitle: 'WDIO Test Report',
     }]
     ],
 
